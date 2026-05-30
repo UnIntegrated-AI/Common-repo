@@ -1,7 +1,5 @@
 import socket
 import threading
-import tkinter
-
 
 HOST = "127.0.0.1"
 PORT = 5000
@@ -18,19 +16,13 @@ def recieve():
         try: # if connection is good
             message = client.recv(1024).decode() # receiving any message sent by the server
 
-            if username == "Kirmada":
-                client.send("Admin".encode())
-                get_admin_user = client.recv(1024).decode
-                if get_admin_user == "Get Admin User":
-                    client.send(username.encode())
+            if message == "Naam Batao": # if server is asking for username
+                client.send(username.encode()) # sending username to server (client hi bhej raha hai)
+                get_pass = client.recv(1024).decode()
+                if get_pass == "Get Password":
+                    client.send(password.encode())
             else:
-                if message == "Naam Batao": # if server is asking for username
-                    client.send(username.encode()) # sending username to server (client hi bhej raha hai)
-                    get_pass = client.recv(1024).decode()
-                    if get_pass == "Get Password":
-                        client.send(password.encode())
-                else:
-                    print(message) # printing message if server is not asking for username
+                print(message) # printing message if server is not asking for username
         except: # if connection is lost
             print("An error occured!") # informing user about lost connection
             client.close() # closing client connection
@@ -42,8 +34,7 @@ def write():
         msg = input("")
         if msg:
             message = f"{username}: {msg}"
-            client.send(message.encode())
-            # message = f'{username}: {input("")}' # Forces the user to either send a message or close connection
+            client.send(message.encode()) # Forces the user to either send a message or close connection
         else:
             pass
 
